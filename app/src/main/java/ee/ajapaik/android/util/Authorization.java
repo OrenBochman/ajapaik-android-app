@@ -1,8 +1,5 @@
 package ee.ajapaik.android.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.Settings;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,13 +7,10 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 
 import java.io.StringReader;
-import java.util.UUID;
 
 import static ee.ajapaik.android.util.Authorization.Type.ANONYMOUS;
 
 public class Authorization {
-    private static final String SHARED_PREFS = "prefs";
-    private static final String KEY_UNIQUE_ID = "user.id";
 
     private static final String KEY_TYPE = "type";
     private static final String KEY_USERNAME = "username";
@@ -24,24 +18,6 @@ public class Authorization {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_FIRSTNAME = "firstname";
     private static final String KEY_LASTNAME = "lastname";
-
-    public static String getUniqueIdentifier(Context context) {
-        String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-
-        if(androidId == null || androidId.length() == 0) {
-            SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-
-            if((androidId = preferences.getString(KEY_UNIQUE_ID, "")).length() == 0) {
-                SharedPreferences.Editor editor = preferences.edit();
-
-                androidId = UUID.randomUUID().toString();
-                editor.putString(KEY_UNIQUE_ID, androidId);
-                editor.apply();
-            }
-        }
-
-        return androidId;
-    }
 
     public static Authorization getAnonymous() {
         return new Authorization(ANONYMOUS, null, null);
@@ -122,14 +98,6 @@ public class Authorization {
         return attributes;
     }
 
-    public Authorization copyWithToken(String token) {
-        Authorization authorization = new Authorization(m_type, m_username, m_password);
-
-        authorization.m_token = token;
-
-        return authorization;
-    }
-
     public Type getType() {
         return m_type;
     }
@@ -166,15 +134,11 @@ public class Authorization {
             return true;
         }
 
-        if(authorization == null ||
-                authorization.m_type != m_type ||
-                !Objects.match(authorization.m_username, m_username) ||
-                !Objects.match(authorization.m_password, m_password) ||
-                !Objects.match(authorization.m_token, m_token)) {
-            return false;
-        }
-
-        return true;
+        return authorization != null &&
+                authorization.m_type == m_type &&
+                Objects.match(authorization.m_username, m_username) &&
+                Objects.match(authorization.m_password, m_password) &&
+                Objects.match(authorization.m_token, m_token);
     }
 
     @Override
@@ -182,7 +146,7 @@ public class Authorization {
         return getAttributes().toString();
     }
 
-    public static enum Type {
+    public enum Type {
         ANONYMOUS(0, "auto"),
         FACEBOOK(1, "fb"),
         GOOGLE(2, "google"),
@@ -202,7 +166,7 @@ public class Authorization {
             return UNKNOWN;
         }
 
-        private Type(int code, String name) {
+        Type(int code, String name) {
             m_code = code;
             m_name = name;
         }

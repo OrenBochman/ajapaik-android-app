@@ -2,7 +2,6 @@ package ee.ajapaik.android.data;
 
 import android.content.Context;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -33,8 +32,7 @@ public class Upload extends Model {
 
     private static final String API_PATH = "/photo/upload/";
 
-    public static final String INTERNAL_STORAGE_FILE_SUFFIX = "Ajapaik-rephoto-";
-    public static final String DATA_FILE_EXTENSION = ".txt";
+    private static final String INTERNAL_STORAGE_FILE_SUFFIX = "Ajapaik-rephoto-";
     private static final String IMAGE_FILE_EXTENSION = ".jpg";
     private static final String FOLDER_NAME = "Ajapaik-rephotos";
 
@@ -52,7 +50,7 @@ public class Upload extends Model {
     private static final String KEY_SCALE = "scale";
 
     public static WebAction<Upload> createAction(Context context, Upload upload) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("id", upload.getPhoto().getIdentifier());
         parameters.put(KEY_SCALE, Float.toString(upload.getScale()));
@@ -73,7 +71,7 @@ public class Upload extends Model {
         parameters.put(KEY_PITCH, Float.toString(upload.m_pitch));
         parameters.put(KEY_ROLL, Float.toString(upload.m_roll));
 
-        return new WebAction<Upload>(context, API_PATH, parameters, new File(upload.getPath()), null);
+        return new WebAction<>(context, API_PATH, parameters, new File(upload.getPath()), null);
     }
 
     private String m_path;
@@ -122,7 +120,7 @@ public class Upload extends Model {
         m_longitude = ((primitive = attributes.getAsJsonPrimitive(KEY_LONGITUDE)) != null && primitive.isNumber()) ? primitive.getAsDouble() : 0.0F;
         m_accuracy = ((primitive = attributes.getAsJsonPrimitive(KEY_ACCURACY)) != null && primitive.isNumber()) ? primitive.getAsFloat() : 0.0F;
         m_age = ((primitive = attributes.getAsJsonPrimitive(KEY_AGE)) != null && primitive.isNumber()) ? primitive.getAsInt() : 0;
-        m_flip = ((primitive = attributes.getAsJsonPrimitive(KEY_FLIP)) != null && primitive.isBoolean()) ? primitive.getAsBoolean() : false;
+        m_flip = ((primitive = attributes.getAsJsonPrimitive(KEY_FLIP)) != null && primitive.isBoolean()) && primitive.getAsBoolean();
         m_yaw = ((primitive = attributes.getAsJsonPrimitive(KEY_YAW)) != null && primitive.isNumber()) ? primitive.getAsFloat() : 0.0F;
         m_pitch = ((primitive = attributes.getAsJsonPrimitive(KEY_PITCH)) != null && primitive.isNumber()) ? primitive.getAsFloat() : 0.0F;
         m_roll = ((primitive = attributes.getAsJsonPrimitive(KEY_ROLL)) != null && primitive.isNumber()) ? primitive.getAsFloat() : 0.0F;
@@ -181,10 +179,6 @@ public class Upload extends Model {
         return m_scale;
     }
 
-    public Uri getLocalUri() {
-        return Uri.fromFile(new File(m_path));
-    }
-
     public boolean save(byte[] data) {
         File imageFile = new File(m_path);
 
@@ -223,12 +217,6 @@ public class Upload extends Model {
             }
         }
         return false;
-    }
-
-    public boolean unsave() {
-        File file = new File(m_path);
-
-        return file.delete();
     }
 
     public JsonObject getAttributes() {
@@ -277,23 +265,19 @@ public class Upload extends Model {
             return true;
         }
 
-        if(upload == null ||
-                !Objects.match(upload.getPhoto(), m_photo) ||
-                !Objects.match(upload.getPath(), m_path) ||
-                !Objects.match(upload.getDate(), m_date) ||
-                upload.m_flip != m_flip ||
-                upload.m_scale != m_scale ||
-                upload.m_age != m_age ||
-                upload.m_latitude != m_latitude ||
-                upload.m_longitude != m_longitude ||
-                upload.m_accuracy != m_accuracy ||
-                upload.m_yaw != m_yaw ||
-                upload.m_pitch != m_pitch ||
-                upload.m_roll != m_roll) {
-            return false;
-        }
-
-        return true;
+        return upload != null &&
+                Objects.match(upload.getPhoto(), m_photo) &&
+                Objects.match(upload.getPath(), m_path) &&
+                Objects.match(upload.getDate(), m_date) &&
+                upload.m_flip == m_flip &&
+                !(upload.m_scale != m_scale) &&
+                upload.m_age == m_age &&
+                !(upload.m_latitude != m_latitude) &&
+                !(upload.m_longitude != m_longitude) &&
+                !(upload.m_accuracy != m_accuracy) &&
+                !(upload.m_yaw != m_yaw) &&
+                !(upload.m_pitch != m_pitch) &&
+                !(upload.m_roll != m_roll);
     }
 
     public static final Model.Creator<Upload> CREATOR = new Model.Creator<Upload>() {

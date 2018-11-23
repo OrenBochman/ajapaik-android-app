@@ -25,7 +25,7 @@ public class Feed extends Model {
     }
 
     public static WebAction<Feed> createSearchAction(Context context, String query) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         parameters.put("query", query);
         return new Action(context, API_SEARCH_PATH, parameters);
     }
@@ -37,7 +37,7 @@ public class Feed extends Model {
     private List<Album> m_albums;
 
     public Feed(JsonObject attributes) {
-        m_albums = new ArrayList<Album>();
+        m_albums = new ArrayList<>();
 
         for(JsonElement tagElement : readArray(attributes, KEY_ALBUMS)) {
             if(tagElement.isJsonObject()) {
@@ -80,12 +80,7 @@ public class Feed extends Model {
             return true;
         }
 
-        if(feed == null ||
-                !Objects.match(feed.getAlbums(), m_albums)) {
-            return false;
-        }
-
-        return true;
+        return feed != null && Objects.match(feed.getAlbums(), m_albums);
     }
 
     private static class Action extends WebAction<Feed> {

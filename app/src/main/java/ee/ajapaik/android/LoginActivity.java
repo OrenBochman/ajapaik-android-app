@@ -3,8 +3,8 @@ package ee.ajapaik.android;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import ee.ajapaik.android.fragment.LoginFragment;
-import ee.ajapaik.android.R;
 import ee.ajapaik.android.util.WebActivity;
 
 public class LoginActivity extends WebActivity {

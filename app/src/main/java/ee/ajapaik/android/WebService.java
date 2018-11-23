@@ -42,7 +42,7 @@ public class WebService extends Service {
     private final Handler m_handler = new Handler(Looper.getMainLooper());
     private ExecutorService m_actionQueue = Executors.newFixedThreadPool(1);
     private ExecutorService m_imageQueue = Executors.newFixedThreadPool(MAX_CONNECTIONS - 1);
-    private List<Task> m_tasks = new ArrayList<Task>();
+    private final List<Task> m_tasks = new ArrayList<>();
     private Session m_session = null;
     private Settings m_settings;
 
@@ -230,7 +230,7 @@ public class WebService extends Service {
         private WebOperation m_operation;
 
         public Task(WebOperation operation) {
-            m_handlers = new ArrayList<WeakReference<ResultHandler>>();
+            m_handlers = new ArrayList<>();
             m_operation = operation;
         }
 
@@ -252,7 +252,7 @@ public class WebService extends Service {
             return count;
         }
         public void addHandler(ResultHandler handler) {
-            m_handlers.add(new WeakReference<ResultHandler>(handler));
+            m_handlers.add(new WeakReference<>(handler));
         }
 
         public void notifyHandlers() {
@@ -279,12 +279,12 @@ public class WebService extends Service {
     }
 
     public static class Connection implements ServiceConnection {
-        private List<QueueItem> m_queue = new ArrayList<QueueItem>();
+        private List<QueueItem> m_queue = new ArrayList<>();
         private boolean m_connecting = false;
         private LocalBinder m_binder;
 
         @SuppressWarnings("unchecked")
-        public <T> WebAction<T> enqueue(Context context, WebAction<T> action, WebAction.ResultHandler<T> handler) {
+        public <T> void enqueue(Context context, WebAction<T> action, WebAction.ResultHandler<T> handler) {
             String uniqueId = action.getUniqueId();
             ActionItem<T> actionItem;
 
@@ -296,7 +296,7 @@ public class WebService extends Service {
                         try {
                             action = (WebAction<T>)item.getOperation();
 
-                            return action;
+                            return;
                         }
                         catch(Exception e) {
                             e.printStackTrace();
@@ -305,7 +305,7 @@ public class WebService extends Service {
                 }
             }
 
-            actionItem = new ActionItem<T>(context, action, handler);
+            actionItem = new ActionItem<>(context, action, handler);
             m_queue.add(actionItem);
 
             if(m_binder != null) {
@@ -314,7 +314,6 @@ public class WebService extends Service {
                 connect(context);
             }
 
-            return action;
         }
 
         public WebImage enqueue(Context context, WebImage image, WebImage.ResultHandler handler) {

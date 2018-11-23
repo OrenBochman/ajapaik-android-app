@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 
@@ -45,16 +44,6 @@ public class AlertFragment extends DialogFragment {
         fragment.setCancelable(false);
 
         return fragment;
-    }
-
-    public <T extends Parcelable> T getUserInfo() {
-        return getArguments().getParcelable(KEY_USER_INFO);
-    }
-
-    public AlertFragment setUserInfo(Parcelable userInfo) {
-        getArguments().putParcelable(KEY_USER_INFO, userInfo);
-
-        return this;
     }
 
     public AlertFragment setIcon(int iconId) {

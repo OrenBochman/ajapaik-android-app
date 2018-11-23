@@ -1,13 +1,15 @@
 package ee.ajapaik.android.data;
 
 import android.content.Context;
+
 import com.google.gson.JsonObject;
-import ee.ajapaik.android.data.util.Model;
-import ee.ajapaik.android.util.Objects;
-import ee.ajapaik.android.util.WebAction;
 
 import java.util.Hashtable;
 import java.util.Map;
+
+import ee.ajapaik.android.data.util.Model;
+import ee.ajapaik.android.util.Objects;
+import ee.ajapaik.android.util.WebAction;
 
 public class Profile extends Model {
     private static final String API_PATH = "/user/me/";
@@ -19,7 +21,7 @@ public class Profile extends Model {
     private static final String KEY_REPHOTOS = "rephotos";
 
     public static WebAction<Profile> createAction(Context context, Profile profile) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         if(profile != null && profile.getState() != null) {
             parameters.put("state", profile.getState());
@@ -44,10 +46,6 @@ public class Profile extends Model {
     }
 
     public Profile(JsonObject attributes) {
-        this(attributes, null);
-    }
-
-    public Profile(JsonObject attributes, Profile baseProfile) {
         m_link = readHyperlink(attributes, KEY_LINK);
         m_name = readString(attributes, KEY_NAME);
         m_avatar = readHyperlink(attributes, KEY_AVATAR);
@@ -102,17 +100,13 @@ public class Profile extends Model {
             return true;
         }
 
-        if(profile == null ||
-                profile.getRephotosCount() != m_rephotos ||
-                !Objects.match(profile.getLink(), m_link) ||
-                !Objects.match(profile.getMessage(), m_message) ||
-                !Objects.match(profile.getAvatar(), m_avatar) ||
-                !Objects.match(profile.getName(), m_name) ||
-                !Objects.match(profile.getState(), m_state)) {
-            return false;
-        }
-
-        return true;
+        return profile != null &&
+                profile.getRephotosCount() == m_rephotos &&
+                Objects.match(profile.getLink(), m_link) &&
+                Objects.match(profile.getMessage(), m_message) &&
+                Objects.match(profile.getAvatar(), m_avatar) &&
+                Objects.match(profile.getName(), m_name) &&
+                Objects.match(profile.getState(), m_state);
     }
 
     private static class Action extends WebAction<Profile> {
@@ -130,7 +124,7 @@ public class Profile extends Model {
 
         @Override
         protected Profile parseObject(JsonObject attributes) {
-            return new Profile(attributes, m_baseProfile);
+            return new Profile(attributes);
         }
     }
 

@@ -1,16 +1,18 @@
 package ee.ajapaik.android.data;
 
 import android.content.Context;
+
 import com.google.gson.JsonObject;
-import ee.ajapaik.android.data.util.Model;
-import ee.ajapaik.android.util.Authorization;
-import ee.ajapaik.android.util.Objects;
-import ee.ajapaik.android.util.WebAction;
 
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+
+import ee.ajapaik.android.data.util.Model;
+import ee.ajapaik.android.util.Authorization;
+import ee.ajapaik.android.util.Objects;
+import ee.ajapaik.android.util.WebAction;
 
 public class Session extends Model {
     private static final String KEY_EXPIRES = "expires.abs";
@@ -25,7 +27,7 @@ public class Session extends Model {
     private static final int DEFAULT_SESSION_LENGTH_IN_SECONDS = 60;
 
     public static WebAction<Session> createRegisterAction(Context context, Authorization authorization) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("os", "android");
         parameters.put("version", "0.2");
@@ -35,11 +37,11 @@ public class Session extends Model {
         parameters.put("firstname", authorization.getFirstname());
         parameters.put("lastname", authorization.getLastname());
 
-        return new WebAction<Session>(context, "/register/", parameters, CREATOR);
+        return new WebAction<>(context, "/register/", parameters, CREATOR);
     }
 
     public static WebAction<Session> createLoginAction(Context context, Authorization authorization) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("os", "android");
         parameters.put("version", "0.2");
@@ -51,7 +53,7 @@ public class Session extends Model {
     }
 
     public static WebAction<Session> createLogoutAction(Context context) {
-        return new WebAction<Session>(context, "/logout/", null, CREATOR);
+        return new WebAction<>(context, "/logout/", null, CREATOR);
     }
 
     public static Session parse(String str) {
@@ -94,7 +96,7 @@ public class Session extends Model {
     }
 
     public Map<String, String> getWebParameters() {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put(KEY_WEB_TOKEN, m_token);
         parameters.put(KEY_WEB_USER, m_user);
@@ -126,7 +128,7 @@ public class Session extends Model {
     }
 
     public boolean isExpired() {
-        return (new Date().getTime() > m_expires) ? true : false;
+        return new Date().getTime() > m_expires;
     }
 
     @Override
@@ -137,14 +139,10 @@ public class Session extends Model {
             return true;
         }
 
-        if(session == null ||
-           session.getExpires() != m_expires ||
-           !Objects.match(session.getToken(), m_token) ||
-           !Objects.match(session.getUser(), m_user)) {
-            return false;
-        }
-
-        return true;
+        return session != null &&
+                session.getExpires() == m_expires &&
+                Objects.match(session.getToken(), m_token) &&
+                Objects.match(session.getUser(), m_user);
     }
 
     private static class Action extends WebAction<Session> {

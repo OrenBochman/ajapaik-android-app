@@ -1,6 +1,5 @@
 package ee.ajapaik.android.widget.util;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -8,13 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OnCompositeTouchListener implements View.OnTouchListener {
-    private List<View.OnTouchListener> m_listeners = new ArrayList<View.OnTouchListener>();
+    private List<View.OnTouchListener> m_listeners = new ArrayList<>();
 
-    public OnCompositeTouchListener(Context context) {
-        this(context, null);
-    }
+    public OnCompositeTouchListener() { }
 
-    public OnCompositeTouchListener(Context context, View.OnTouchListener[] listeners) {
+    public OnCompositeTouchListener(View.OnTouchListener[] listeners) {
         if(listeners != null) {
             for(View.OnTouchListener listener : listeners) {
                 addListener(listener);
@@ -22,7 +19,7 @@ public class OnCompositeTouchListener implements View.OnTouchListener {
         }
     }
 
-    public void addListener(View.OnTouchListener listener) {
+    private void addListener(View.OnTouchListener listener) {
         m_listeners.add(listener);
     }
 

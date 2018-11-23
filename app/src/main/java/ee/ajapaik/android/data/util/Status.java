@@ -33,14 +33,12 @@ public enum Status {
     public static Status parse(String str) {
         try {
             return parse(Integer.parseInt(str));
-        }
-        catch(Exception e) {
-        }
+        } catch (Exception ignore) { }
 
         return INVALID_CODE;
     }
 
-    private Status(int code) {
+    Status(int code) {
         m_code = code;
     }
 
@@ -49,17 +47,17 @@ public enum Status {
     }
 
     public boolean isGood() {
-        return (m_code == NONE.m_code) ? true : false;
+        return m_code == NONE.m_code;
     }
 
     public boolean isNetworkProblem() {
-        return (m_code < 0) ? true : false;
+        return m_code < 0;
     }
 
     public boolean isSessionProblem() {
-        return (m_code == SESSION_REQUIRED.m_code ||
-                m_code == SESSION_EXPIRED.m_code ||
-                m_code == SESSION_INVALID.m_code) ? true : false;
+        return m_code == SESSION_REQUIRED.m_code
+                || m_code == SESSION_EXPIRED.m_code
+                || m_code == SESSION_INVALID.m_code;
     }
 }
 

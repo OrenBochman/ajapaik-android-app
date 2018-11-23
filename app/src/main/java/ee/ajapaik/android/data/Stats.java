@@ -15,11 +15,6 @@ public class Stats extends Model {
     private int m_rephotod;
     private int m_total;
 
-    public Stats() {
-        m_rephotod = 0;
-        m_total = 0;
-    }
-
     public Stats(JsonObject attributes) {
         m_rephotod = readInteger(attributes, KEY_REPHOTOD);
         m_total = readInteger(attributes, KEY_TOTAL);
@@ -44,7 +39,7 @@ public class Stats extends Model {
     }
 
     public boolean empty() {
-        return (m_rephotod == 0 && m_total == 0) ? true : false;
+        return m_rephotod == 0 && m_total == 0;
     }
 
     @Override
@@ -55,13 +50,9 @@ public class Stats extends Model {
             return true;
         }
 
-        if(stats == null ||
-                stats.getRephotodCount() != m_rephotod ||
-                stats.getTotalCount() != m_total) {
-            return false;
-        }
-
-        return true;
+        return stats != null &&
+                stats.getRephotodCount() == m_rephotod &&
+                stats.getTotalCount() == m_total;
     }
 
     public static final Model.Creator<Stats> CREATOR = new Model.Creator<Stats>() {

@@ -24,8 +24,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import ee.ajapaik.android.BuildConfig;
-
 public class LocationService extends Service implements LocationListener, SensorEventListener {
     private static final String TAG = "LocationService";
 
@@ -41,7 +39,7 @@ public class LocationService extends Service implements LocationListener, Sensor
     private float[] m_accelerometer = null;
     private float[] m_magneticField = null;
     private final IBinder m_binder = new LocalBinder();
-    private List<Listener> m_listeners = new ArrayList<Listener>();
+    private final List<Listener> m_listeners = new ArrayList<>();
     private boolean m_enabled = false;
     private Location m_location;
     private LocationManager m_manager;
@@ -222,7 +220,7 @@ public class LocationService extends Service implements LocationListener, Sensor
         }
 
         public boolean isEnabled() {
-            return (m_binder != null) ? m_binder.isEnabled() : true;
+            return (m_binder == null) || m_binder.isEnabled();
         }
 
         public Location getLocation() {

@@ -19,6 +19,6 @@ public abstract class PhotoModel extends Model {
             return Uri.parse(str);
         }
 
-        return uri;
+        return null;
     }
 }

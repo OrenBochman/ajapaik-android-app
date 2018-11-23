@@ -21,7 +21,7 @@ public abstract class Model implements Parcelable {
     protected static boolean canRead(JsonObject obj, String key) {
         JsonElement element = obj.get(key);
 
-        return (element != null && !element.isJsonNull()) ? true : false;
+        return element != null && !element.isJsonNull();
     }
 
     protected static JsonArray readArray(JsonObject obj, String key) {
@@ -31,10 +31,6 @@ public abstract class Model implements Parcelable {
     }
 
     protected static boolean readBoolean(JsonObject obj, String key) {
-        return readBoolean(obj, key, false);
-    }
-
-    protected static boolean readBoolean(JsonObject obj, String key, boolean defaultValue) {
         JsonElement element = obj.get(key);
 
         if(element != null && element.isJsonPrimitive()) {
@@ -45,18 +41,14 @@ public abstract class Model implements Parcelable {
             }
 
             if(primitive.isNumber()) {
-                return (primitive.getAsInt() == 1) ? true : false;
+                return primitive.getAsInt() == 1;
             }
         }
 
-        return defaultValue;
+        return false;
     }
 
     protected static Date readDateTime(JsonObject obj, String key) {
-        return readDateTime(obj, key, null);
-    }
-
-    private static Date readDateTime(JsonObject obj, String key, Date defaultValue) {
         JsonElement element = obj.get(key);
 
         if(element != null && element.isJsonPrimitive()) {
@@ -71,7 +63,7 @@ public abstract class Model implements Parcelable {
             }
         }
 
-        return defaultValue;
+        return null;
     }
 
     protected static Date readDate(JsonObject obj, String key) {
@@ -114,10 +106,6 @@ public abstract class Model implements Parcelable {
     }
 
     protected static String readIdentifier(JsonObject obj, String key) {
-        return readIdentifier(obj, key, null);
-    }
-
-    protected static String readIdentifier(JsonObject obj, String key, String defaultValue) {
         JsonElement element = obj.get(key);
 
         if(element != null && element.isJsonPrimitive()) {
@@ -132,14 +120,10 @@ public abstract class Model implements Parcelable {
             }
         }
 
-        return defaultValue;
+        return null;
     }
 
     protected static int readInteger(JsonObject obj, String key) {
-        return readInteger(obj, key, 0);
-    }
-
-    protected static int readInteger(JsonObject obj, String key, int defaultValue) {
         JsonElement element = obj.get(key);
 
         if(element != null && element.isJsonPrimitive()) {
@@ -150,7 +134,7 @@ public abstract class Model implements Parcelable {
             }
         }
 
-        return defaultValue;
+        return 0;
     }
 
     protected static long readLong(JsonObject obj, String key) {
@@ -168,10 +152,6 @@ public abstract class Model implements Parcelable {
     }
 
     protected static double readNumber(JsonObject obj, String key) {
-        return readNumber(obj, key, 0.0);
-    }
-
-    protected static double readNumber(JsonObject obj, String key, double defaultValue) {
         JsonElement element = obj.get(key);
 
         if(element != null && element.isJsonPrimitive()) {
@@ -182,7 +162,7 @@ public abstract class Model implements Parcelable {
             }
         }
 
-        return defaultValue;
+        return 0.0;
     }
 
     protected static JsonObject readObject(JsonObject obj, String key) {
@@ -232,10 +212,6 @@ public abstract class Model implements Parcelable {
         obj.addProperty(key, value);
     }
 
-    protected static void write(JsonObject obj, String key, long value) {
-        obj.addProperty(key, value);
-    }
-
     protected static void write(JsonObject obj, String key, double value) {
         obj.addProperty(key, value);
     }
@@ -278,7 +254,7 @@ public abstract class Model implements Parcelable {
 
     protected static void write(JsonObject obj, String key, boolean value) {
         if(value) {
-            obj.addProperty(key, value);
+            obj.addProperty(key, true);
         }
     }
 

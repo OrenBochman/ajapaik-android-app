@@ -24,8 +24,8 @@ public class SHA1 {
             bytes = new byte[0];
         }
 
-        for(int i = 0, c = bytes.length; i < c; i++) {
-            output.append(Strings.toBase16(bytes[i]));
+        for (byte aByte : bytes) {
+            output.append(Strings.toBase16(aByte));
         }
 
         return output.toString();

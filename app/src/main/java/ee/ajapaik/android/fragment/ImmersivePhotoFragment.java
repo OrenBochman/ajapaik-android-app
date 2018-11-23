@@ -2,6 +2,7 @@ package ee.ajapaik.android.fragment;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +23,7 @@ public class ImmersivePhotoFragment extends ImageFragment {
     private PointF m_offset;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_immersive_photo, container, false);
     }
 
@@ -40,7 +41,7 @@ public class ImmersivePhotoFragment extends ImageFragment {
             m_photo = getPhoto();
         }
 
-        getImageView().setOnTouchListener(new OnCompositeTouchListener(getActivity(), new View.OnTouchListener[]{
+        getImageView().setOnTouchListener(new OnCompositeTouchListener(new View.OnTouchListener[]{
                 new OnScaleTouchListener(getActivity()) {
                     @Override
                     public void onScale(float scale) {
@@ -49,7 +50,7 @@ public class ImmersivePhotoFragment extends ImageFragment {
                         if (newScale < 1.0f) {
                             newScale = 1.0f;
                         }
-                        ;
+
                         imageView.setScale(newScale);
                         m_scale = imageView.getScale();
                     }
@@ -102,7 +103,7 @@ public class ImmersivePhotoFragment extends ImageFragment {
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull final Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putBoolean(KEY_FLIPPED_MODE, m_flippedMode);

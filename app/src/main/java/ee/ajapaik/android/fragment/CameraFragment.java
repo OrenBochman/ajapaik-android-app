@@ -355,11 +355,11 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated");
 
         getCameraButton().setOnClickListener(this);
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        mTextureView = view.findViewById(R.id.texture);
     }
 
     @Override
@@ -410,6 +410,7 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
      * @param width  The width of available size for camera preview
      * @param height The height of available size for camera preview
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     private void setUpCameraOutputs(int width, int height) {
         Log.d(TAG, "setUpCameraOutputs");
 
@@ -804,7 +805,7 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 
         return inflater.inflate(R.layout.fragment_camera, container, false);
@@ -838,7 +839,8 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
         );
 
         getImageView().setOnLoadListener(imageLoadListener());
-        getImageView().setOnTouchListener(new OnCompositeTouchListener(getActivity(), new View.OnTouchListener[]{
+        getImageView().setOnTouchListener(new OnCompositeTouchListener(new View.OnTouchListener[]{
+
                 new OnScaleTouchListener(getActivity()) {
                     @Override
                     public void onScale(float scale) {
@@ -849,7 +851,7 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
                     }
                 },
 
-                new OnCompositeTouchListener(getActivity()) {
+                new OnCompositeTouchListener() {
 
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -943,7 +945,7 @@ public class CameraFragment extends ImageFragment implements View.OnClickListene
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull final Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putBoolean(KEY_FLIPPED_MODE, m_flippedMode);

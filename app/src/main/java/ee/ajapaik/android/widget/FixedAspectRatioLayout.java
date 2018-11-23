@@ -32,10 +32,6 @@ public class FixedAspectRatioLayout extends FrameLayout {
         }
     }
 
-    public boolean isAspectRatioVertical() {
-        return m_aspectRatioVertical;
-    }
-
     public float getAspectRatioWidth() {
         return m_aspectRatioWidth;
     }

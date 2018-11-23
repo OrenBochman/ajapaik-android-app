@@ -3,6 +3,7 @@ package ee.ajapaik.android;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,9 +38,9 @@ public abstract class NavigationDrawerActivity extends WebActivity {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
                 this,  mDrawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -51,10 +52,10 @@ public abstract class NavigationDrawerActivity extends WebActivity {
     }
 
     private void configureNavigationDrawer() {
-        NavigationView navView = (NavigationView) findViewById(R.id.nvView);
+        NavigationView navView = findViewById(R.id.nvView);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Log.d(TAG, "onNavigationItemSelected");
 
                 Context context = NavigationDrawerActivity.this;

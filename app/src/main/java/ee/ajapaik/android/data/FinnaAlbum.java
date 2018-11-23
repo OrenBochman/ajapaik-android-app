@@ -33,7 +33,7 @@ public class FinnaAlbum extends Album {
     public static WebAction<Album> createNearestAction(Context context, Location location, String state, int range, String finnaAlbum) {
         Log.d(TAG, "FinnaAlbum: createNearestAction");
 
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         String latitude_ = Double.toString(location.getLatitude());
         String longitude_ = Double.toString(location.getLongitude());
 
@@ -61,7 +61,7 @@ public class FinnaAlbum extends Album {
     public static WebAction<Album> createSearchAction(Context context, String query, Location location, int range, String finnaAlbum) {
         String baseIdentifier = "all-albums|" + query.replaceAll(" ", "-");
 
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         parameters.put("query", query);
 
         String latitude_ = Double.toString(location.getLatitude());

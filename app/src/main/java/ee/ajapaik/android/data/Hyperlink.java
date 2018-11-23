@@ -67,13 +67,9 @@ public class Hyperlink extends Model {
             return true;
         }
 
-        if(hyperlink == null ||
-           !Objects.match(hyperlink.getName(), m_name) ||
-           !Objects.match(hyperlink.getURL(), m_url)) {
-            return false;
-        }
-
-        return true;
+        return hyperlink != null &&
+                Objects.match(hyperlink.getName(), m_name) &&
+                Objects.match(hyperlink.getURL(), m_url);
     }
 
     public Spanned toHtml() {

@@ -1,12 +1,12 @@
 package ee.ajapaik.android;
 
 import com.facebook.FacebookSdk;
-import ee.ajapaik.android.BuildConfig;
-import ee.ajapaik.android.R;
-import ee.ajapaik.android.util.WebImage;
+
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+
+import ee.ajapaik.android.util.WebImage;
 
 import static ee.ajapaik.android.util.WebActivity.FACEBOOK_SIGN_IN_RESOLUTION_REQUEST;
 

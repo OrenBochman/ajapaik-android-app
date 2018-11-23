@@ -10,7 +10,7 @@ public class Size {
     }
 
     public boolean empty() {
-        return (width <= 0 && height <= 0) ? true : false;
+        return width <= 0 && height <= 0;
     }
 
     @Override
@@ -21,11 +21,7 @@ public class Size {
             return true;
         }
 
-        if(size == null || size.width != width || size.height != height) {
-            return false;
-        }
-
-        return true;
+        return size != null && size.width == width && size.height == height;
     }
 
     @Override

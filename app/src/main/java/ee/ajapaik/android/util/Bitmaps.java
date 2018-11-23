@@ -12,20 +12,12 @@ public class Bitmaps {
 
         if(type == FLIP_VERTICAL) {
             matrix.preScale(1.0F, -1.0F);
-        }  else if(type == FLIP_HORIZONTAL) {
+        } else if(type == FLIP_HORIZONTAL) {
             matrix.preScale(-1.0F, 1.0F);
         } else {
             return null;
         }
 
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-    }
-
-    public static Bitmap rotate(Bitmap src, float angle) {
-        Matrix matrix = new Matrix();
-
-        matrix.preRotate(angle);
-
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, false);
     }
 }

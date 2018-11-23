@@ -36,7 +36,7 @@ public class Album extends Model {
     private static final String KEY_PHOTOS_REMOVE = "photos-";
 
     public static WebAction<Album> createNearestAction(Context context, Location location, String state, int range) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         String latitude_ = Double.toString(location.getLatitude());
         String longitude_ = Double.toString(location.getLongitude());
 
@@ -67,7 +67,7 @@ public class Album extends Model {
     }
 
     public static WebAction<Album> createStateAction(Context context, Album album) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         String albumId = getAlbumId(album);
         parameters.put("id", albumId);
@@ -82,7 +82,7 @@ public class Album extends Model {
     public static WebAction<Album> createRephotoSearchAction(Context context, String query) {
         String baseIdentifier = "rephotos|" + query.replaceAll(" ", "-");
 
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         parameters.put("query", query);
 
         return new Action(context, API_USER_REPHOTOS_SEARCH_PATH, parameters, null, baseIdentifier);
@@ -91,7 +91,7 @@ public class Album extends Model {
     public static WebAction<Album> createSearchAction(Context context, String query) {
         String baseIdentifier = "all-albums|" + query.replaceAll(" ", "-");
 
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         parameters.put("query", query);
 
         return new Action(context, API_SEARCH_PATH, parameters, null, baseIdentifier);
@@ -103,7 +103,7 @@ public class Album extends Model {
         String albumId = getAlbumId(album);
 
         String baseIdentifier = albumId + "|" + query.replaceAll(" ", "-");
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         parameters.put("albumId", albumId);
         parameters.put("query", query);
 
@@ -111,7 +111,7 @@ public class Album extends Model {
     }
 
     public static WebAction<Album> createStateAction(Context context, String albumIdentifier) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("id", albumIdentifier);
 
@@ -145,7 +145,7 @@ public class Album extends Model {
     }
 
     private static Map<String, String> createLocationParameters(Location location) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
         if (location != null) {
             String latitude = Double.toString(location.getLatitude());
             String longitude = Double.toString(location.getLongitude());
@@ -182,7 +182,7 @@ public class Album extends Model {
         m_title = readString(attributes, KEY_TITLE, (baseAlbum != null) ? baseAlbum.getTitle() : null);
         m_state = readString(attributes, KEY_STATE, (baseAlbum != null) ? baseAlbum.getState() : null);
         m_stats = (stats != null) ? new Stats(stats) : ((baseAlbum != null) ? baseAlbum.getStats() : null);
-        m_photos = new ArrayList<Photo>();
+        m_photos = new ArrayList<>();
 
         if(m_identifier == null && baseIdentifier != null) {
             m_identifier = baseIdentifier;
@@ -202,9 +202,7 @@ public class Album extends Model {
             List<Photo> photos = baseAlbum.getPhotos();
 
             if(photos != null && photos.size() > 0) {
-                for(Photo photo : photos) {
-                    m_photos.add(photo);
-                }
+                m_photos.addAll(photos);
             }
         }
 
@@ -299,56 +297,8 @@ public class Album extends Model {
 
     public Photo getFirstPhoto() {
         if(m_photos != null) {
-            for(Photo photo : m_photos) {
-                return photo;
-            }
-
             if(m_photos.size() > 0) {
                 return m_photos.get(0);
-            }
-        }
-
-        return null;
-    }
-
-    public Photo getLastPhoto() {
-        if(m_photos != null) {
-            for(int i = m_photos.size() - 1; i >= 0; i--) {
-                Photo photo = m_photos.get(i);
-
-                return photo;
-            }
-
-            if(m_photos.size() > 0) {
-                return m_photos.get(m_photos.size() - 1);
-            }
-        }
-
-        return null;
-    }
-
-    public Photo getPrevPhoto(String identifier) {
-        if(identifier != null && m_photos != null) {
-            for(int i = 0, c = m_photos.size(); i < c; i++) {
-                Photo photo = m_photos.get(i);
-
-                if(photo.getIdentifier().equals(identifier)) {
-                    return (i > 0) ? m_photos.get(i - 1) : null;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public Photo getNextPhoto(String identifier) {
-        if(identifier != null && m_photos != null) {
-            for(int i = 0, c = m_photos.size(); i < c; i++) {
-                Photo photo = m_photos.get(i);
-
-                if(photo.getIdentifier().equals(identifier)) {
-                    return (i + 1 < c) ? m_photos.get(i + 1) : null;
-                }
             }
         }
 
@@ -379,17 +329,13 @@ public class Album extends Model {
             return true;
         }
 
-        if(album == null ||
-                !Objects.match(album.getIdentifier(), m_identifier) ||
-                !Objects.match(album.getImage(), m_image) ||
-                !Objects.match(album.getTitle(), m_title) ||
-                !Objects.match(album.getState(), m_state) ||
-                !Objects.match(album.getStats(), m_stats) ||
-                !Objects.match(album.getPhotos(), m_photos)) {
-            return false;
-        }
-
-        return true;
+        return album != null &&
+                Objects.match(album.getIdentifier(), m_identifier) &&
+                Objects.match(album.getImage(), m_image) &&
+                Objects.match(album.getTitle(), m_title) &&
+                Objects.match(album.getState(), m_state) &&
+                Objects.match(album.getStats(), m_stats) &&
+                Objects.match(album.getPhotos(), m_photos);
     }
 
     private static class Action extends WebAction<Album> {

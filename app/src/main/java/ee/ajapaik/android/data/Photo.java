@@ -46,7 +46,7 @@ public class Photo extends PhotoModel {
     }
 
     public static WebAction<Photo> createStateAction(Context context, String photoIdentifier) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("id", photoIdentifier);
 
@@ -54,7 +54,7 @@ public class Photo extends PhotoModel {
     }
 
     public static WebAction<Photo> createFavoritingAction(Context context, String photoIdentifier, boolean favorited) {
-        Map<String, String> parameters = new Hashtable<String, String>();
+        Map<String, String> parameters = new Hashtable<>();
 
         parameters.put("id", photoIdentifier);
         parameters.put("favorited", String.valueOf(favorited));
@@ -243,8 +243,7 @@ public class Photo extends PhotoModel {
     public boolean equals(Object obj) {
         Photo photo = (Photo) obj;
 
-        return photo == this ||
-                photo != null && getAttributes().equals(photo.getAttributes());
+        return photo == this || photo != null && getAttributes().equals(photo.getAttributes());
     }
 
     @Override

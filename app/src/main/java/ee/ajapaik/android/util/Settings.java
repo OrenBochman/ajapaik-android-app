@@ -2,12 +2,7 @@ package ee.ajapaik.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.location.Location;
-import android.util.DisplayMetrics;
-
-import java.util.Locale;
 
 import ee.ajapaik.android.data.Profile;
 import ee.ajapaik.android.data.Session;
@@ -25,16 +20,6 @@ public class Settings {
     private static final String KEY_PROFILE = "profile";
     private static final String KEY_UPLOAD = "upload";
     private static final String KEY_SESSION = "session";
-
-    public static void updateLocale(Context context, String language) {
-        Resources resources = context.getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        Configuration cfg = resources.getConfiguration();
-
-        cfg.locale = (language != null) ? new Locale(language) : Locale.getDefault();
-        //Locale.setDefault(cfg.locale);
-        resources.updateConfiguration(cfg, dm);
-    }
 
     private SharedPreferences m_preferences;
 

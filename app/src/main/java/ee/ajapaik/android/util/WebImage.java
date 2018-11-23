@@ -33,7 +33,7 @@ public class WebImage extends WebOperation {
     private static final Object s_lock = new Object();
 
     public static void invalidate(Context context) {
-        List<FileEntry> cache = new ArrayList<FileEntry>();
+        List<FileEntry> cache = new ArrayList<>();
         long timestamp = new Date().getTime();
         File dir = getCacheDir(context);
         File[] files = dir.listFiles();
@@ -73,23 +73,6 @@ public class WebImage extends WebOperation {
         }
     }
 
-    public static void clear(Context context) {
-        File dir = getCacheDir(context);
-        File[] files = dir.listFiles();
-
-        if(files != null) {
-            for(File file : files) {
-                if(file.getName().startsWith(CACHE_PREFIX)) {
-                    if(BuildConfig.DEBUG) {
-                        Log.d(TAG, "Removed cached image (" + file.getName() + ")");
-                    }
-
-                    file.delete();
-                }
-            }
-        }
-    }
-
     private static File getCacheDir(Context context) {
         return context.getFilesDir();
     }
@@ -101,20 +84,13 @@ public class WebImage extends WebOperation {
     private int m_status = HTTP_STATUS_NOT_FOUND;
 
     public WebImage(Context context, Uri uri) {
-        this(context, uri.toString());
+        super(context, uri.toString(), null);
+
+        m_cache = true;
+        m_path = CACHE_PREFIX + SHA1.encode(uri.toString());
+        m_render = true;
     }
 
-    public WebImage(Context context, String url) {
-        this(context, url, true, true);
-    }
-
-    public WebImage(Context context, String url, boolean cache, boolean render) {
-        super(context, url, null);
-
-        m_cache = cache;
-        m_path = CACHE_PREFIX + SHA1.encode(url);
-        m_render = render;
-    }
 
     public int getStatus() {
         return m_status;
@@ -241,18 +217,7 @@ public class WebImage extends WebOperation {
 
     private static class FileEntryComparator implements Comparator<FileEntry> {
         public int compare(FileEntry a, FileEntry b) {
-            long aL = a.lastModified;
-            long bL = b.lastModified;
-
-            if(aL > bL) {
-                return -1;
-            }
-
-            if(aL < bL) {
-                return 1;
-            }
-
-            return 0;
+            return Long.compare(b.lastModified, a.lastModified);
         }
     }
 

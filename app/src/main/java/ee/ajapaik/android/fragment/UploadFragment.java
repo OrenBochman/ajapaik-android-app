@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -110,7 +111,7 @@ public class UploadFragment extends WebFragment implements DialogInterface {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_upload, container, false);
     }
 
@@ -340,7 +341,7 @@ public class UploadFragment extends WebFragment implements DialogInterface {
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull final Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         JsonArray jsonArray = new JsonArray();
@@ -418,8 +419,6 @@ public class UploadFragment extends WebFragment implements DialogInterface {
             getConnection().dequeueAll(getActivity());
         } else if (requestCode == DIALOG_SUCCESS) {
             success();
-        } else if (requestCode == DIALOG_ERROR_NO_CONNECTION ||
-                requestCode == DIALOG_ERROR_UNKNOWN) {
         }
     }
 

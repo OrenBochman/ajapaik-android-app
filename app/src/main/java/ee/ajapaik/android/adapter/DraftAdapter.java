@@ -42,20 +42,20 @@ public class DraftAdapter extends StaggeredGridView.Adapter {
 
     @Override
     public void bindItemView(int position, View view) {
-        ImageView imageView = (ImageView)view.findViewById(R.id.image_background);
-        TextView textView = (TextView)view.findViewById(R.id.text_distance);
-        Button button = (Button)view.findViewById(R.id.button);
+        ImageView imageView = view.findViewById(R.id.image_background);
+        TextView textView = view.findViewById(R.id.text_distance);
+        Button button = view.findViewById(R.id.button);
         PhotoDraftsDTO rephotoDraft = m_photos.get(position);
         final Photo photo = rephotoDraft.getPhoto();
 
         imageView.setImageURI(photo.getThumbnail(THUMBNAIL_SIZE));
         textView.setText(Strings.toLocalizedDistance(view.getContext(), photo.getLocation(), m_location));
 
-        imageView = (ImageView)view.findViewById(R.id.image_rephoto);
+        imageView = view.findViewById(R.id.image_rephoto);
         imageView.setImageResource(Images.toRephotoDraftCountDrawableId(rephotoDraft.getDraftCount()));
 
         if (photo.isFavorited()) {
-            imageView = (ImageView) view.findViewById(R.id.image_favorited);
+            imageView = view.findViewById(R.id.image_favorited);
             imageView.setImageResource(R.drawable.ic_favorite_white_36dp);
             imageView.setColorFilter(view.getContext().getResources().getColor(R.color.tint), PorterDuff.Mode.MULTIPLY);
         }

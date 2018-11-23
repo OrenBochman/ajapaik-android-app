@@ -501,7 +501,7 @@ public class PhotoFragment extends ImageFragment {
         }
 
         if(date != null) {
-            String dateString = Strings.toLocalizedDate(getActivity(), date);
+            String dateString = Strings.toLocalizedDate(date);
             if(author != null) {
                 dateString = ", " + dateString;
             }

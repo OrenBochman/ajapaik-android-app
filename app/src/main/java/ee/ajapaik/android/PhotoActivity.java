@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.annotation.NonNull;
 
 import ee.ajapaik.android.data.Album;
 import ee.ajapaik.android.data.Photo;
@@ -111,7 +111,7 @@ public class PhotoActivity extends WebActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         getFragment().onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

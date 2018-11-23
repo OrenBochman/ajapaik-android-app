@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -74,7 +74,7 @@ public abstract class WebOperation {
     private Map<String, String> m_parameters;
     private File m_file;
     private volatile boolean m_cancelled;
-    protected volatile boolean m_started;
+    private volatile boolean m_started;
     private volatile WeakReference<ProgressListener> m_progressListener;
 
     public WebOperation(Context context, String url, Map<String, String> parameters) {
@@ -86,10 +86,6 @@ public abstract class WebOperation {
         m_url = url;
         m_parameters = parameters;
         m_file = file;
-    }
-
-    public void setProgressListener(ProgressListener progressListener) {
-        m_progressListener = (progressListener != null) ? new WeakReference<ProgressListener>(progressListener) : null;
     }
 
     public String getUniqueId() {
@@ -105,11 +101,11 @@ public abstract class WebOperation {
     }
 
     public boolean isMultipart() {
-        return (m_file != null) ? true : false;
+        return m_file != null;
     }
 
     protected boolean isPost() {
-        return (m_file != null) ? true : false;
+        return m_file != null;
     }
 
     protected File getFile() {
@@ -137,7 +133,7 @@ public abstract class WebOperation {
         NetworkInfo info = cm.getActiveNetworkInfo();
         boolean isPost = isPost();
         String url = m_url;
-        URI uri = null;
+        URI uri;
 
         if(baseURL != null && !url.contains("://")) {
             if(url.startsWith("/") && baseURL.endsWith("/")) {
@@ -202,7 +198,7 @@ public abstract class WebOperation {
                 request = postRequest;
 
                 if(m_file != null || (extraParameters != null && extraParameters.size() > 0) || (m_parameters != null && m_parameters.size() > 0)) {
-                    List<NameValuePair> postData = new ArrayList<NameValuePair>(
+                    List<NameValuePair> postData = new ArrayList<>(
                             ((extraParameters != null) ? extraParameters.size() : 0) + ((m_parameters != null) ? m_parameters.size() : 0));
 
                     if(m_parameters != null) {
@@ -317,15 +313,13 @@ public abstract class WebOperation {
                     entity.consumeContent();
                     entity.getContent().close();
                 }
-                catch(Exception e1) {
-                }
+                catch(Exception ignored) { }
 
                 request.abort();
 
                 try {
                     Thread.sleep(RETRY_INTERVAL);
-                } catch (InterruptedException e1) {
-                }
+                } catch (InterruptedException ignored) { }
             }
         }
 
@@ -336,7 +330,7 @@ public abstract class WebOperation {
         m_cancelled = true;
     }
 
-    protected String getFileName() {
+    private String getFileName() {
         return "original";
     }
 
@@ -344,11 +338,7 @@ public abstract class WebOperation {
     protected abstract void onResponse(int statusCode, InputStream stream) throws ApiException;
 
     public interface ProgressListener {
-        public void onProgress(long progress);
-    }
-
-    public interface ResultHandler {
-        public void onResult(int error, Parcelable data);
+        void onProgress(long progress);
     }
 
     private class ProgressMultipartEntity extends MultipartEntity {
@@ -369,7 +359,7 @@ public abstract class WebOperation {
             }
 
             @Override
-            public void write(byte[] buffer, int offset, int length) throws IOException {
+            public void write(@NonNull byte[] buffer, int offset, int length) throws IOException {
                 out.write(buffer, offset, length);
                 m_progress += length;
 

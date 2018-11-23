@@ -48,7 +48,7 @@ public class WebImageView extends android.support.v7.widget.AppCompatImageView {
         super(context, attrs);
 
         if(attrs != null) {
-            readAttributes(context, attrs);
+            readAttributes(attrs);
         }
     }
 
@@ -56,12 +56,8 @@ public class WebImageView extends android.support.v7.widget.AppCompatImageView {
         super(context, attrs, defStyleAttr);
 
         if(attrs != null) {
-            readAttributes(context, attrs);
+            readAttributes(attrs);
         }
-    }
-
-    public boolean isFlipped() {
-        return m_flipped;
     }
 
     public void setFlipped(boolean flipped) {
@@ -85,7 +81,7 @@ public class WebImageView extends android.support.v7.widget.AppCompatImageView {
     }
 
     public void setOffset(PointF offset) {
-        if(m_offset != offset && (m_offset == null || offset == null || !m_offset.equals(offset))) {
+        if(m_offset != offset && (m_offset == null || !m_offset.equals(offset))) {
             m_offset = offset;
 
             setScaleType(ScaleType.MATRIX);
@@ -250,7 +246,7 @@ public class WebImageView extends android.support.v7.widget.AppCompatImageView {
         }
     }
 
-    private void readAttributes(Context context, AttributeSet attrs) {
+    private void readAttributes(AttributeSet attrs) {
         m_placeholderResourceId = attrs.getAttributeResourceValue(NAMESPACE, KEY_SRC, INVALID_RESOURCE_ID);
     }
 
